@@ -1,8 +1,8 @@
-from profiles.views import ProfileAPIViewMD
-from django.urls import path
+from profiles.views import ProfileAPIView
+from django.urls import path, re_path
 
 app_name = 'profile'
 
 urlpatterns = [
-        path('<slug:pk>.md', ProfileAPIViewMD.as_view(), name='profile_md'),
- ]
+        re_path('(?P<pk>[\w-]+)\.(md|html)', ProfileAPIView.as_view(), name='profile_detail'),
+]
