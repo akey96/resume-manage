@@ -4,5 +4,5 @@ from django.urls import path, re_path
 app_name = 'profile'
 
 urlpatterns = [
-        re_path('(?P<pk>[\w-]+)\.(md|html)', ProfileAPIView.as_view(), name='profile_detail'),
+        re_path('(?P<pk>[\w-]+)\.(md|html|pdf)', ProfileAPIView.as_view(), name='profile_detail'),
 ]

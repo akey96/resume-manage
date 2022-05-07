@@ -81,7 +81,21 @@ class ProfileTestCase(APITestCase):
         self.assertTrue(self.profile.first_name in response_profile_markdown_content)
         self.assertTrue(self.profile.last_name in response_profile_markdown_content)
 
-
+    def test_url_profile_pdf_success(self):
+        credentials = {
+            'email': self.user_email,
+            'password': self.user_password,
+        }
+        response_jwt = self.client.post(self.url_jwt, credentials)
+        content = ast.literal_eval(response_jwt.content.decode("UTF-8"))
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + content["access"])
+        id = str(self.profile.id)
+        response_profile_html = self.client.get(reverse("profile:profile_detail", args=[id, "pdf"]))
+        
+        self.assertEqual(response_jwt.status_code, status.HTTP_200_OK)
+        self.assertEqual(response_profile_html.status_code, status.HTTP_200_OK)
+        
+        
     def test_url_profile_markdown_401_unauthorized_without_jwt(self):
         id = str(self.profile.id)
         response_profile_markdown = self.client.get(reverse("profile:profile_detail", args=[id, "md"]))
@@ -114,4 +128,23 @@ class ProfileTestCase(APITestCase):
         self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + content["access"])
         id = '12312312h123h123211vf2_123'
         response_profile_markdown = self.client.get(reverse("profile:profile_detail", args=[id, "html"]))
+        self.assertEqual(response_profile_markdown.status_code, status.HTTP_404_NOT_FOUND)
+
+
+
+    def test_url_profile_pdf_401_unauthorized_without_jwt(self):
+        id = str(self.profile.id)
+        response_profile_markdown = self.client.get(reverse("profile:profile_detail", args=[id, "pdf"]))
+        self.assertEqual(response_profile_markdown.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_url_profile_pdf_404_not_found(self):
+        credentials = {
+            'email': self.user_email,
+            'password': self.user_password,
+        }
+        response_jwt = self.client.post(self.url_jwt, credentials, format="json")
+        content = ast.literal_eval(response_jwt.content.decode("UTF-8"))
+        self.client.credentials(HTTP_AUTHORIZATION='Bearer ' + content["access"])
+        id = '12312312h123h123211vf2_123'
+        response_profile_markdown = self.client.get(reverse("profile:profile_detail", args=[id, "pdf"]))
         self.assertEqual(response_profile_markdown.status_code, status.HTTP_404_NOT_FOUND)
