@@ -32,3 +32,40 @@ class Profile(models.Model):
 
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
+
+class CategorySkill(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    created_date = models.DateField('Fecha de Creacion', auto_now=False, auto_now_add=True)
+    modified_date = models.DateField('Fecha de Modificacion', auto_now=True, auto_now_add=False)
+    delete_date = models.DateField('Fecha de Eliminacion', auto_now=True, auto_now_add=False)
+    name_category = models.CharField('Nombre de Categoria de Habilidades', max_length=255, blank=False, null=False)
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name_category
+
+    class Meta:
+        ordering = ['name_category']
+
+class Skill(models.Model):
+    LEVELS = (
+        (0, 'None'),
+        (1, 'Basic'),
+        (1, 'Intermedium'),
+        (2, 'Advanced'),
+        (3, 'Native'),
+    )
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    created_date = models.DateField('Fecha de Creacion', auto_now=False, auto_now_add=True)
+    modified_date = models.DateField('Fecha de Modificacion', auto_now=True, auto_now_add=False)
+    delete_date = models.DateField('Fecha de Eliminacion', auto_now=True, auto_now_add=False)
+    name  = models.CharField('Nombre de Habilidad', max_length=255, blank=False, null=False)
+    level = models.IntegerField('Nivel de Habilidad',choices=LEVELS, default=0)
+    category_skill = models.ForeignKey(CategorySkill, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        ordering = ['name']
