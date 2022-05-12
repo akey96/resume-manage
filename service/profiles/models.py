@@ -51,9 +51,9 @@ class Skill(models.Model):
     LEVELS = (
         (0, 'None'),
         (1, 'Basic'),
-        (1, 'Intermedium'),
-        (2, 'Advanced'),
-        (3, 'Native'),
+        (2, 'Intermedium'),
+        (3, 'Advanced'),
+        (4, 'Native'),
     )
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

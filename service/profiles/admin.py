@@ -27,7 +27,6 @@ class ProfileAdmin(admin.ModelAdmin):
             CategorySkillInline
         ]
 
-
 class CategorySkillAdmin(admin.ModelAdmin):
     list_display = ('name_category', )
     ordering = ('name_category', )

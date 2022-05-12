@@ -1,0 +1,15 @@
+<h1>{{profile.first_name}} {{profile.last_name}}</h1>
+
+<p>Phone: {{profile.phone}} - Email: {{profile.email}} - github: {{profile.git}}</p>
+
+<p>{{profile.description}}</p>
+
+<h2> Habilidades </h2>
+{% for k, v in skill_query.items %}
+   <h4> {{k}} </h4>
+   <ul>
+      {% for i in v %}
+       <li>{{i}}</li>
+      {% endfor %}
+   </ul>
+{% endfor %}
