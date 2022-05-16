@@ -42,7 +42,7 @@ class CategorySkill(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.name_category
+        return self.name_category + " - " + self.profile.first_name
 
     class Meta:
         ordering = ['name_category']
