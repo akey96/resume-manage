@@ -39,7 +39,7 @@ class CategorySkill(models.Model):
     modified_date = models.DateField('Fecha de Modificacion', auto_now=True, auto_now_add=False)
     delete_date = models.DateField('Fecha de Eliminacion', auto_now=True, auto_now_add=False)
     name_category = models.CharField('Nombre de Categoria de Habilidades', max_length=255, blank=False, null=False)
-    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    profile = models.ManyToManyField(Profile)
 
     def __str__(self):
         return self.name_category
@@ -62,7 +62,7 @@ class Skill(models.Model):
     delete_date = models.DateField('Fecha de Eliminacion', auto_now=True, auto_now_add=False)
     name  = models.CharField('Nombre de Habilidad', max_length=255, blank=False, null=False)
     level = models.IntegerField('Nivel de Habilidad',choices=LEVELS, default=0)
-    category_skill = models.ForeignKey(CategorySkill, on_delete=models.CASCADE)
+    category_skill = models.ManyToManyField(CategorySkill)
 
     def __str__(self):
         return self.name
