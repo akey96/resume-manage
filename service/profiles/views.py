@@ -9,6 +9,13 @@ from rest_framework.views import APIView
 from profiles.models import Profile, CategorySkill, Skill
 import markdown2
 from .utils import PDFUtils
+from profiles.serializers import ProfileSerializer
+
+class ProfileListAPIView(ListAPIView):
+    serializer_class = ProfileSerializer
+
+    def get_queryset(self):
+        return Profile.objects.filter(state=True)
 
 class ProfileAPIView(APIView):
         
