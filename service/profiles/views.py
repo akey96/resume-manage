@@ -12,6 +12,8 @@ from .utils import PDFUtils
 from profiles.serializers import ProfileSerializer
 
 class ProfileListAPIView(ListAPIView):
+
+    permission_classes = [IsAuthenticated]
     serializer_class = ProfileSerializer
 
     def get_queryset(self):
