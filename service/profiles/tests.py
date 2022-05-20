@@ -24,16 +24,26 @@ class ProfileTestCase(APITestCase):
         self.languages_programming = CategorySkill.objects.create(name_category='Lenguajes de programacion', profile=self.profile)
         self.as_a_person = CategorySkill.objects.create(name_category='Como Persona', profile=self.profile)
 
-        self.skill_languages_1 = Skill.objects.create(name='Español', level=4, category_skill=self.languages)
-        self.skill_languages_2 = Skill.objects.create(name='English', level=1, category_skill=self.languages)
+        self.skill_languages_1 = Skill.objects.create(name='Español', level=4)
+        self.skill_languages_1.category_skill.set([self.languages])
 
-        self.skill_languages_programming_1 = Skill.objects.create(name='Python', level=2, category_skill=self.languages_programming)
-        self.skill_languages_programming_2 = Skill.objects.create(name='Javascript', level=2, category_skill=self.languages_programming)
+        self.skill_languages_2 = Skill.objects.create(name='English', level=1)
+        self.skill_languages_2.category_skill.set([self.languages])
 
-        self.skill_as_a_person_1 = Skill.objects.create(name='Liderazgo', category_skill=self.as_a_person)
-        self.skill_as_a_person_2 = Skill.objects.create(name='Honestidad', category_skill=self.as_a_person)
-        self.skill_as_a_person_3 = Skill.objects.create(name='Trabajo en Equipo', category_skill=self.as_a_person)
+        self.skill_languages_programming_1 = Skill.objects.create(name='Python', level=2)
+        self.skill_languages_programming_1.category_skill.set([self.languages_programming])
 
+        self.skill_languages_programming_2 = Skill.objects.create(name='Javascript', level=2)
+        self.skill_languages_programming_2.category_skill.set([self.languages_programming])
+
+        self.skill_as_a_person_1 = Skill.objects.create(name='Liderazgo')
+        self.skill_as_a_person_1.category_skill.set([self.as_a_person])
+
+        self.skill_as_a_person_2 = Skill.objects.create(name='Honestidad')
+        self.skill_as_a_person_2.category_skill.set([self.as_a_person])
+
+        self.skill_as_a_person_3 = Skill.objects.create(name='Trabajo en Equipo')
+        self.skill_as_a_person_3.category_skill.set([self.as_a_person])
         self.profile.save()
 
 
@@ -197,7 +207,6 @@ class ProfileTestCase(APITestCase):
         id = '12312312h123h123211vf2_123'
         response_profile_markdown = self.client.get(reverse("profile:profile_detail", args=[id, "html"]))
         self.assertEqual(response_profile_markdown.status_code, status.HTTP_404_NOT_FOUND)
-
 
 
     def test_url_profile_pdf_401_unauthorized_without_jwt(self):

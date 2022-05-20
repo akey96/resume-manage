@@ -30,7 +30,9 @@ TESTING = False
 if len(sys.argv) > 1 and sys.argv[1] == 'test':
     TESTING = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+        '18.220.194.151'
+    ]
 
 
 # Application definition
