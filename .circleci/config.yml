@@ -5,9 +5,12 @@ jobs:
     steps:
       - checkout
       - run: |
-          docker build .
           docker login -u $DOCKER_USER -p $DOCKER_PASS
-          docker tag python:3.9 akey96/resume-manager:v1.0
+          docker build -t react-app:v1.0 -f Dockerfile.react.app ./
+          docker tag react-app:v1.0 akey96/react-app:v1.0
+          docker push akey96/react-app:v1.0
+          docker build -t resume-manager:v1.0 -f Dockerfile.resume.django ./
+          docker tag resume-manager:v1.0 akey96/resume-manager:v1.0
           docker push akey96/resume-manager:v1.0
   test:
     docker:
@@ -35,7 +38,8 @@ jobs:
           destination: python_app
   deploy:
     docker:
-      - image: circleci/golang:1.10
+      - image: circleci/golang
+        user: root
     steps:
       - checkout
       - run: |
@@ -43,25 +47,23 @@ jobs:
           echo '18.220.194.151 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDHb315V+LulCEFVaLLQ/y7Rrgc4ATN5YQxWbxD4zt1OUjsDEUglQzslyzQYigMdMF++yboQWRfuCrgkr7kg1uEa5IpHPip8asKcJJRVnk4QlzId6KS7nTkHX3OIKvZ/G0ZmdUGS0Vfo/ixACz5f3XRGkUxs3zJ8e/aC42uReB4efxvAlLzoY3lU5USEMuh49+xRdcf0nTXHyrZE/FKjgPWIpr+L0gF7X79Tq/o68Hmue90h+F2CKpijeIXo43EgFeZ8ER08qpckMqrI5AHqIqeXiZObFO+Lt7aNRuPOMsbTmaPyO6LdC/quOwzUPfMtxeK/s+cHc7z4J+5YAeZHrEBXxVMhhn41A5rPjYKZpax/XrQQq4gzqPyxGzX4mchvdhHfKN47gC41D0rZvNqU5kJwO59sBAaMRx/mJPDkkAlZVa8AgHTkpvbhX48rQ8U5NeaedhaSH63oTsdP7yMh/ohV3NfwKxkFgOf2hSwjYQqOs9mVXTbykOySl6SHOszwvE=' >> ~/.ssh/known_hosts
           ssh -i llave-produccion.pem ubuntu@18.220.194.151 <<'ENDSSH'
           cd resume-manager
+          git pull origin develop
           docker login -u $DOCKER_USER -p $DOCKER_PASS
           docker pull akey96/resume-manager:v1.0
+          docker pull akey96/react-app:v1.0
           sudo docker-compose up -d
           ENDSSH
 workflows:
   version: 2
   build_and_test:
     jobs:
-      - test:
-          filters:
-            branches:
-              ignore: develop
+      - test
       - build:
-          filters:
-            branches:
-              ignore: develop
           requires:
             - test
       - deploy:
+          requires:
+            - build
           filters:
             branches:
               only: develop

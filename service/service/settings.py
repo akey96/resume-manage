@@ -30,10 +30,21 @@ TESTING = False
 if len(sys.argv) > 1 and sys.argv[1] == 'test':
     TESTING = True
 
-ALLOWED_HOSTS = [
-        '18.220.194.151'
-    ]
 
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ORIGIN_ALLOW_ALL=True
+CORS_ALLOW_CREDENTIALS = True
+ALLOWED_HOSTS = ['*']
+
+# CORS_ALLOWED_ORIGINS = [
+#         "http://18.220.194.151",
+#     ]
+
+# CORS_ORIGIN_WHITELIST = (
+#     'http://18.220.194.151',
+# )
+
+# CORS_ALLOW_HEADERS = ['*']
 
 # Application definition
 
@@ -53,20 +64,6 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework_simplejwt'
 ]
-#
-# REST_FRAMEWORK = {
-#     'DEFAULT_RENDERER_CLASSES': (
-#             'rest_framework.renderers.JSONRenderer',
-#             'rest_framework.renderers.BrowsableAPIRenderer',
-#         ),
-#     'DEFAULT_AUTHENTICATION_CLASSES': (
-#         'rest_framework_simplejwt.authentication.JWTAuthentication',
-#         'rest_framework.authentication.SessionAuthentication'
-#     ),
-#     'DEFAULT_PERMISSION_CLASSES': [
-#         'rest_framework.permissions.IsAuthenticated',
-#     ]
-# }
 
 
 REST_FRAMEWORK = {
@@ -86,6 +83,7 @@ if DEBUG:
         'rest_framework.authentication.SessionAuthentication'
     )
 
+
 if TESTING:
     REST_FRAMEWORK = {
         'DEFAULT_RENDERER_CLASSES': (
@@ -98,6 +96,7 @@ if TESTING:
     }
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -105,7 +104,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'service.urls'

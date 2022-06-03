@@ -1,6 +1,22 @@
 version: '3'
 services:
-  web:
+  backend:
     image: akey96/resume-manager:v1.0
     ports:
-      - "80:8000"
+      - "8000:8000"
+    networks:
+    - network_main_net
+  frontend:
+    image: akey96/react-app:v1.0
+    ports:
+      - "80:80"
+    environment:
+      - NGINX_HOST=foobar.com
+      - NGINX_PORT=80
+    depends_on:
+      - backend
+    networks:
+    - network_main_net
+networks:
+  network_main_net:
+    name: network_main_net
