@@ -3,7 +3,7 @@ Application to manage resumes from developers
 
 # Install
 ```
-- git clone https://github.com/akey96/resume-manager.git
+- git clone https://github.com/akey96/resume-manage.git
 - virtualenv --python=python3.10 env
 - source env/bin/activate
 - pip install -r requirements.txt
